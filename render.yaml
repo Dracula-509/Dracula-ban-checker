@@ -1,0 +1,22 @@
+databases:
+  - name: draculacheckban-db
+    plan: free
+
+services:
+  - type: web
+    name: draculacheckban
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: BANCHECK_API_KEY
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: draculacheckban-db
+          property: connectionString
+      - key: NODE_ENV
+        value: production
