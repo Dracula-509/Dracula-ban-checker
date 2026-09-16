@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dracula Check Ban</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div id="bg-layer"></div>
+
+  <div class="wrap">
+    <div class="panel">
+      <div class="panel-top menu-wrap">
+        <button class="icon-btn" id="history-btn" title="Historique" type="button">⟲</button>
+        <button class="icon-btn" id="menu-btn" title="Menu" type="button">⋮</button>
+
+        <div class="dropdown" id="dropdown">
+          <button type="button" data-modal="settings-modal">Settings</button>
+          <button type="button" data-modal="credits-modal">Credits</button>
+          <button type="button" data-modal="changelog-modal">Changelog</button>
+          <button type="button" id="check-updates-btn">Check updates</button>
+          <button type="button" id="pick-bg-btn">Pick background image</button>
+          <hr />
+          <button type="button" id="share-btn">Share Dracula Check Ban</button>
+          <button type="button" id="telegram-btn">Telegram Channel</button>
+          <button type="button" id="api-btn">BanCheck API</button>
+        </div>
+      </div>
+
+      <div class="deco-row">⊥ · ✳ · ⊥</div>
+      <div class="subtitle-jp">◇ 番号チェッカー ◇</div>
+
+      <form id="check-form">
+        <button type="button" class="autofill-chip" id="autofill-btn">⌘ Autofill</button>
+
+        <div class="phone-row">
+          <select class="country-code" id="country-code">
+            <option value="49">🇩🇪 +49</option>
+          </select>
+          <input id="number-input" type="text" placeholder="1234567890" required />
+        </div>
+        <div class="hint" id="validation-hint"></div>
+
+        <button type="submit">確認 · CHECK ·</button>
+      </form>
+      <div id="result"></div>
+
+      <div class="panel-footer">⊥ · © Dracula Check Ban · ⊥</div>
+    </div>
+
+    <div class="footer-link">
+      <a href="/galerie.html">Mon espace personnel</a>
+    </div>
+  </div>
+
+  <!-- Popup résultat de check -->
+  <div class="result-backdrop" id="result-backdrop">
+    <div class="result-card" id="result-card">
+      <p class="result-label">This Number:</p>
+      <p class="result-number" id="result-number"></p>
+      <p class="result-title" id="result-title"></p>
+
+      <div class="result-details" id="result-details"></div>
+
+      <p class="result-note" id="result-note" style="display:none;"></p>
+
+      <div class="result-actions">
+        <button type="button" id="result-copy-btn">Copy</button>
+        <button type="button" id="result-close-btn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Settings -->
+  <div class="modal-backdrop" id="settings-modal">
+    <div class="modal">
+      <h2>Settings</h2>
+      <div class="field">
+        <label for="lang-select">Langue de l'interface</label>
+        <select id="lang-select" style="width:100%;background:rgba(0,0,0,0.35);border:1px solid var(--border);border-radius:14px;color:var(--ivory);padding:12px;">
+          <option value="fr">Français</option>
+          <option value="en">English</option>
+          <option value="jp">日本語</option>
+        </select>
+      </div>
+      <div class="field">
+        <label><input type="checkbox" id="vibrate-toggle" checked /> Vibration au résultat</label>
+      </div>
+      <div class="field">
+        <label for="banned-text-input">Titre affiché quand banni</label>
+        <input type="text" id="banned-text-input" placeholder="This number is banned" />
+      </div>
+      <div class="field">
+        <label for="clean-text-input">Titre affiché quand actif</label>
+        <input type="text" id="clean-text-input" placeholder="This number is active" />
+      </div>
+      <button class="close-modal" type="button">Fermer</button>
+    </div>
+  </div>
+
+  <!-- Modal Credits -->
+  <div class="modal-backdrop" id="credits-modal">
+    <div class="modal">
+      <h2>Credits</h2>
+      <p>Dracula Check Ban utilise l'API BanCheck pour la vérification des numéros.</p>
+      <ul>
+        <li>Design & développement — vous</li>
+        <li>Vérification spam — BanCheck API</li>
+        <li>Icônes & polices — Google Fonts</li>
+      </ul>
+      <button class="close-modal" type="button">Fermer</button>
+    </div>
+  </div>
+
+  <!-- Modal Changelog -->
+  <div class="modal-backdrop" id="changelog-modal">
+    <div class="modal">
+      <h2>Changelog</h2>
+      <p><strong>v1.0</strong> — Lancement : vérification de numéro, espace personnel, galerie privée.</p>
+      <button class="close-modal" type="button">Fermer</button>
+    </div>
+  </div>
+
+  <!-- Modal Pick background -->
+  <div class="modal-backdrop" id="bg-modal">
+    <div class="modal">
+      <h2>Image de fond</h2>
+      <div class="bg-preview" id="bg-preview-box"></div>
+      <input type="file" id="bg-file-input" accept="image/*" style="width:100%;color:var(--ivory-dim);font-size:13px;" />
+      <p style="font-size:12px;">L'image est stockée sur cet appareil.</p>
+      <button class="close-modal" type="button">Appliquer & fermer</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/libphonenumber-js@1.11.1/bundle/libphonenumber-js.min.js"></script>
+  <script src="/countries.js"></script>
+  <script src="/site.js"></script>
+</body>
+</html>
