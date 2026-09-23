@@ -250,7 +250,7 @@ function getCustomTitle(kind) {
   return kind === 'banned' ? 'This number is banned' : 'This number is active'
 }
 
-function openResultPopup({ variant, numberDisplay, title, icon, detailsHtml, note }) {
+function openResultPopup({ variant, numberDisplay, title, icon, detailsHtml, note, noteVariant }) {
   resultCard.className = `result-card ${variant}`
   resultNumberEl.textContent = numberDisplay
   resultTitleEl.innerHTML = `${icon ? icon + ' ' : ''}${title}`
@@ -259,6 +259,7 @@ function openResultPopup({ variant, numberDisplay, title, icon, detailsHtml, not
   if (note) {
     resultNoteEl.textContent = note
     resultNoteEl.style.display = ''
+    resultNoteEl.style.color = noteVariant === 'danger' ? '#ff4d4f' : ''
   } else {
     resultNoteEl.style.display = 'none'
   }
@@ -375,9 +376,11 @@ if (checkForm) {
         })
       } else if (result.banned) {
         // On récupère le détail exact (perma ou pas, heures) via appeal-status,
-        // seule source fiable pour is_perma — ban_type seul peut induire en erreur
+        // seule source fiable pour is_perma — ban_type seul peut induire en erreur.
+        // hard_ban est traité comme définitif au même titre que perma_ban.
         const appeal = await fetchAppealStatus(numberToSend)
-        const isPerma = appeal ? !!appeal.is_perma : (result.ban_type === 'perma_ban')
+        const DEFINITIVE_BAN_TYPES = ['perma_ban', 'hard_ban']
+        const isPerma = appeal ? !!appeal.is_perma : DEFINITIVE_BAN_TYPES.includes(result.ban_type)
 
         const customTitle = getCustomTitle('banned')
         const variant = isPerma ? 'banned perma' : 'banned'
@@ -416,6 +419,8 @@ if (checkForm) {
           waitingNote = '⏳ En attente — aucun appel déposé pour le moment.'
         } else if (!isPerma && hasAppealFiled) {
           waitingNote = '⏳ Appel en cours de traitement par WhatsApp.'
+        } else if (isPerma && hasAppealFiled) {
+          waitingNote = '❌ Appel rejeté — ban permanent, aucun recours possible.'
         } else if (result.in_app_ban_appeal) {
           waitingNote = "Un appel est possible depuis l'application WhatsApp."
         }
@@ -427,6 +432,7 @@ if (checkForm) {
           icon,
           detailsHtml: rows,
           note: waitingNote,
+          noteVariant: isPerma && hasAppealFiled ? 'danger' : undefined,
         })
       } else {
         const customTitle = getCustomTitle('clean')
